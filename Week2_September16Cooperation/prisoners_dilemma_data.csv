@@ -1,0 +1,16 @@
+﻿player1,player2,score1,score2
+retaliater,punisher,300,300
+retaliater,grumpy,300,300
+retaliater,grudger,300,300
+retaliater,backstabber,300,300
+retaliater,prober,132,137
+backstabber,punisher,300,295
+backstabber,grumpy,304,294
+backstabber,grudger,300,295
+backstabber,prober,101,116
+grudger,punisher,300,300
+grudger,grumpy,300,300
+grudger,prober,107,102
+grumpy,punisher,300,300
+grumpy,prober,98,128
+punisher,prober,300,300
