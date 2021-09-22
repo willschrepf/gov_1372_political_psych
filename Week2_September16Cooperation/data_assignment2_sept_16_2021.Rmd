@@ -73,7 +73,7 @@ P.P.S., when you close the app window, there may be some warnings or errors (lik
 
 ```{r, include = F, message = F}
 
-shiny_tournament()
+# shiny_tournament()
 
 ```
 
@@ -99,7 +99,7 @@ Of course, don't just copy these numbers, since they're made up.
 
 
 Now you can finally read the data you created into R using the following code and start answering the questions that follow.
-```{r}
+```{r read_data, echo = FALSE, message=FALSE}
 
 pd_data <- read_csv("prisoners_dilemma_data.csv") %>% 
   mutate(winner = case_when( # if you are interested, case_when() is a very useful
@@ -118,7 +118,7 @@ The following code makes a data frame called `player_data_long` that you can use
 
 If you want, try to figure out what each line of code does. Cleaning the data and rearranging it like this is an important part of data science, not just running regressions and taking means. This is why we are leaving some of it to you, via `group_by()` and `summarize()`.
 
-```{r q1_rearrange}
+```{r q1_rearrange, echo = FALSE, message=FALSE}
 
 player1_data <- pd_data %>% select(player = player1, score = score1, opponent = player2)
 player2_data <- pd_data %>% select(player = player2, score = score2, opponent = player1)
@@ -159,17 +159,17 @@ To rank the strategies based on the number of wins, think about making use of th
 
 **Create a plot, similar to the one above, that displays how each strategy fared against all the other strategies. Which strategies were most successful against which other ones? Comment on the patterns that you see.**
 
-```{r}
+```{r make_plot, echo = FALSE, message = FALSE}
 p <- player_data_long %>%
   ggplot(aes(y = player, x = opponent, fill = score)) +
   geom_tile() +
    scale_fill_gradient(low = "lightgreen",
                       high = "darkgreen",
                       guide = "colorbar") +
-  guides(colour=FALSE) + labs(title = "Success of Strategies Against One Another", subtitle = "In Repeated Axelrod Simulations", y = "Player", x = "Opponent", fill = "Score of PLAYER \n(on the y-axis)")
+  guides(colour=FALSE) + labs(title = "Success of Strategies Against One Another in Axelrod Simulations", subtitle = "Score of PLAYER (y-axis) versus a given OPPONENT (on the x-axis)", y = "Player", x = "Opponent", fill = "Score of PLAYER\nversus OPPONENT") + 
+  geom_text(aes(label = round(score, 1)))
 
-ggplotly(p)
-
+p
 
 ```
 
