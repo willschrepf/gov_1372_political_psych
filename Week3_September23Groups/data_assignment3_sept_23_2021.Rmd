@@ -2,7 +2,10 @@
 title: "Gov 1372 - Groups and Identities"
 author: "your name here"
 date: "September 23, 2021"
-output: pdf_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 urlcolor: blue
 ---
 
