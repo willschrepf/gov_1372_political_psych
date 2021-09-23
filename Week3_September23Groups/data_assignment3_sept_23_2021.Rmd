@@ -45,7 +45,8 @@ Once again, the .Rmd version of this file has code you can use to load the data.
 
 ```{r faces, include=FALSE}
 # remember to use the correct file name
-marriage_data <- read_csv('filenamehere_Sep23.csv')
+marriage_data <- read_csv('Sep23ClassData_clean.csv')
+
 ```
 
 These data are *not* the raw output from the survey you took. In particular, all of the indicator variables are the result of coding decisions and data processing done by the instructors (based on the procedures used in Klar et al. (2018)). For the first few questions, just open up the data and take a look at it (ask us if you need help viewing the data in spreadsheet format in RStudio).
@@ -57,12 +58,10 @@ These data are *not* the raw output from the survey you took. In particular, all
 ## Question 2
 **How was the \texttt{polarized} variable defined? Is there another way you might consider coding this variable for individual polarization? What would be an advantage and a disadvantage of your alternative approach?**
 
-\bigskip
-\bigskip
-\bigskip
+
 Now let's take a look at if there are differences in some of the key outcome variables depending on treatment status. Here is an example of how you might make a graph to look at if the rates of unhappiness with a prospective out-party in-law differ depending on the frequency with which they talk about politics.
 
-```{r}
+```{r original_plot, echo = FALSE}
 ggplot(data = marriage_data %>% filter(is.na(outPartyUnhappy)==FALSE)) + 
   geom_bar(mapping = aes(x = outPartyUnhappy, y = ..prop.., group = 1), stat = "count") + 
   facet_wrap(~treatment) + ylab("Proportion") + xlab("Unhappy with Out-Party Marriage")
@@ -71,9 +70,18 @@ ggplot(data = marriage_data %>% filter(is.na(outPartyUnhappy)==FALSE)) +
 ## Question 3
 **Comment on what you see in the example graph. Did the treatment affect unhappiness with a prospective out-party member coming into the family?**
 
+Yes--there appears to be a slight increase in outparty unhappiness for the 'frequently' group and a slight decrease in outparty happiness for the 'rarely' group relative to the control.
+
 
 ## Question 4
 **Did the different treatment conditions affect the proportions of people who were affectively polarized? Make a plot and explain what you found.**
+
+```{r q4, echo = FALSE}
+marriage_data %>%
+  select(treatment, polarized)
+
+```
+
 
 
 ## Question 5
@@ -83,6 +91,28 @@ ggplot(data = marriage_data %>% filter(is.na(outPartyUnhappy)==FALSE)) +
 ## Question 6 (Data Science Question)
 **We might also be interested in if things looked different for weak vs. strong partisans. Pick one of the two outcome variables you just examined and make a plot that would help us understand if responses within and across treatment groups differ between weak and strong partisans.**
 
+```{r q6, echo = FALSE}
+marriage_data_q6 <- marriage_data %>%
+  select(strongPARTISAN, treatment, polarized) %>%
+  drop_na() %>%
+  mutate(partisan_new = case_when(
+    strongPARTISAN == TRUE ~ "Strong Partisans",
+    strongPARTISAN == FALSE ~ "Not Strong Partisans"
+  )) %>%
+  mutate(polarized_new = case_when(
+    polarized == TRUE ~ "Polarized",
+    polarized == FALSE ~ "Not Polarized"
+  )) %>%
+  mutate(treatment_partisan = paste(treatment, " group - ", partisan_new))
+
+
+marriage_data_q6 %>%
+  ggplot()  +
+  geom_bar(mapping = aes(x = polarized_new, y = ..prop.., group = 1), stat = "count") + 
+  facet_wrap(~partisan_new) + 
+  labs(title = "Effect of Strong Partisanship on Polarization", x = "Polarization Status", y = "Proportion")
+
+```
 
 
 ## Question 7

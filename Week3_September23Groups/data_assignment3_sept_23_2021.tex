@@ -1,0 +1,311 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Gov 1372 - Groups and Identities},
+  pdfauthor={your name here},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Blue,
+  urlcolor=blue,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Gov 1372 - Groups and Identities}
+\author{your name here}
+\date{September 23, 2021}
+
+\begin{document}
+\maketitle
+
+\hypertarget{marriage-and-partisan-polarization}{%
+\section{Marriage and Partisan
+Polarization}\label{marriage-and-partisan-polarization}}
+
+Iyengar and Westwood (2014) use answers to questions about a child
+marrying an in-party or out-party spouse as one way of characterizing
+affective partisan polarization. Some authors have questioned if the way
+this question is framed too coarsely. In particular,
+\href{https://drive.google.com/file/d/1FOAPqfLQweUFaXtzLGhJT_kkBRwHWkLu/view?usp=sharing}{Klar
+et al.~(2018)} argue that, by making the prospective child-in-law's
+partisanship salient, the marriage question may be picking up on
+respondents dislike of partisanship in general, rather than a dislike of
+the opposing party.
+
+The in-class survey you took was a partial replication of the Klar et
+al.~(2018) study. We randomized whether you were asked about a
+prospective child-in-law who ``frequently talks about politics,''
+``rarely talks about politics,'' or a person whose frequency of
+discussing politics was not mentioned. This last, control, condition
+matches the wording of the question used in Iyengar and Westwood (2014).
+
+\textbf{Data Details:}
+
+\begin{itemize}
+\item
+  File Name: \texttt{Sep23ClassData\_clean.csv}
+\item
+  Source: These data are from the survey you took in class. The
+  questions are slightly adapted versions of some of the questions used
+  in Klar et al (2018) (see
+  \href{https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/poq/82/2/10.1093_poq_nfy014/1/nfy014_suppl_supplementary_appendix.pdf?Expires=1635436645\&Signature=w4p6NVT1Wrv3tcOJMw~B1LaNxM2-HZIJRtb7fWWqFHKodmLQBO3QeG3qWudEDeJjDT2XhmC3ud8WkNAptT0Hxc3bl47AsAIuMJyQEYMxcJ4W-hYevLRX7GoWNe13yxsXzOe~Q8Fs0kBjiWJf-P9AAkNB-eWZWMtznzPgBnanfRjwWzEB~ziBHcNOGi7I0FNBHSna7Igih6F~tFmuUcSVtvKGJ1IUFE86mc0IyeQLNxzAoz7n7v5ZrI~9J6hzE7wKfDn~ASRJ3icDtx2gN0J2KUVuN-nEIs~0yMNMzp4btpAq8aYp90AmMGHtemsUPoaogAz3PoA4oJNXFCpPNdiFjA__\&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA}{here}
+  for the supplemental material of that study with the original
+  questionnaire, if you are interested).
+\end{itemize}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.33\columnwidth}\raggedright
+Variable Name\strut
+\end{minipage} & \begin{minipage}[b]{0.61\columnwidth}\raggedright
+Variable Description\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{pid3}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+Political party preference\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{pid\_lean}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+If a respondent didn't identify with the Democrats or Republicans in
+\texttt{QID1}, this indicates to which party (or neither) they feel
+closer\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{strongGOP}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+Indicator variable for whether the respondent identifies as a Strong
+Republican\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{strongDEM}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+Indicator variable for whether the respondent identifies as a Strong
+Democrat\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{strongPARTISAN}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+Indicator variable for whether the respondent identifies as a strong
+member of either major party\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{party}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+Party variable where those who lean toward either major party are
+counted as identifying with that party\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{treatment}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+Which treatment condition the respondent was randomly assigned to\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{marryDemocrat}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+The respondent's answer to how happy they would be if their child
+married a Democrat\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{marryRepublican}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+The respondent's answer to how happy they would be if their child
+married a Republican\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{inPartyHappy}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+Indicator variable for whether the respondent would be happy if their
+child married a member of their own party\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{outPartyUnhappy}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+Indicator variable for whether the respondent would be unhappy if their
+child married a member of the other major party\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.33\columnwidth}\raggedright
+\texttt{polarized}\strut
+\end{minipage} & \begin{minipage}[t]{0.61\columnwidth}\raggedright
+Indicator variable for whether the respondent was affectively
+polarized\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+Once again, the .Rmd version of this file has code you can use to load
+the data.
+
+These data are \emph{not} the raw output from the survey you took. In
+particular, all of the indicator variables are the result of coding
+decisions and data processing done by the instructors (based on the
+procedures used in Klar et al.~(2018)). For the first few questions,
+just open up the data and take a look at it (ask us if you need help
+viewing the data in spreadsheet format in RStudio).
+
+\hypertarget{question-1}{%
+\subsection{Question 1}\label{question-1}}
+
+\textbf{How were the \texttt{inPartyHappy} and \texttt{outPartyUnhappy}
+variables defined? Does this seem like a reasonable procedure? Do you
+notice any missing values? Why are they missing? How might the missing
+data affect researchers' inferences?}
+
+\hypertarget{question-2}{%
+\subsection{Question 2}\label{question-2}}
+
+\textbf{How was the \texttt{polarized} variable defined? Is there
+another way you might consider coding this variable for individual
+polarization? What would be an advantage and a disadvantage of your
+alternative approach?}
+
+Now let's take a look at if there are differences in some of the key
+outcome variables depending on treatment status. Here is an example of
+how you might make a graph to look at if the rates of unhappiness with a
+prospective out-party in-law differ depending on the frequency with
+which they talk about politics.
+
+\includegraphics{data_assignment3_sept_23_2021_files/figure-latex/original_plot-1.pdf}
+
+\hypertarget{question-3}{%
+\subsection{Question 3}\label{question-3}}
+
+\textbf{Comment on what you see in the example graph. Did the treatment
+affect unhappiness with a prospective out-party member coming into the
+family?}
+
+Yes--there appears to be a slight increase in outparty unhappiness for
+the `frequently' group and a slight decrease in outparty happiness for
+the `rarely' group relative to the control.
+
+\hypertarget{question-4}{%
+\subsection{Question 4}\label{question-4}}
+
+\textbf{Did the different treatment conditions affect the proportions of
+people who were affectively polarized? Make a plot and explain what you
+found.}
+
+\begin{verbatim}
+## # A tibble: 89 x 2
+##    treatment  polarized
+##    <chr>      <lgl>    
+##  1 Control    TRUE     
+##  2 Control    TRUE     
+##  3 Control    TRUE     
+##  4 Frequently FALSE    
+##  5 Frequently TRUE     
+##  6 Rarely     FALSE    
+##  7 Control    TRUE     
+##  8 Rarely     NA       
+##  9 Frequently TRUE     
+## 10 Control    TRUE     
+## # ... with 79 more rows
+\end{verbatim}
+
+\hypertarget{question-5}{%
+\subsection{Question 5}\label{question-5}}
+
+\textbf{Take a quick look at Figure 1 and Figure 2 in
+\href{https://academic.oup.com/poq/article-abstract/82/2/379/4996003}{Klar
+et al.~(2018)}. How do the results from our in-class data compare to
+their results? What might explain any differences? If there aren't an
+notable differences, is there a common pattern across the two datasets
+that is puzzling? What hypothesis do you have to explain it.}
+
+\hypertarget{question-6-data-science-question}{%
+\subsection{Question 6 (Data Science
+Question)}\label{question-6-data-science-question}}
+
+\textbf{We might also be interested in if things looked different for
+weak vs.~strong partisans. Pick one of the two outcome variables you
+just examined and make a plot that would help us understand if responses
+within and across treatment groups differ between weak and strong
+partisans.}
+
+\includegraphics{data_assignment3_sept_23_2021_files/figure-latex/q6-1.pdf}
+
+\hypertarget{question-7}{%
+\subsection{Question 7}\label{question-7}}
+
+\textbf{Are there any other issues you can think of that might confound
+the utility of the marriage question as a measure of affective
+polarization? If you have any concerns, how might you design a study to
+evaluate your hypotheses?}
+
+\hypertarget{question-8}{%
+\subsection{Question 8}\label{question-8}}
+
+\textbf{Based on the data and your work on this assignment, are there
+any changes you would make to the Iyengar and Westwood (2014) study or
+the Klar et al.~(2018) study or extensions of the research that you
+would like to see? (For example, would you alter the wording of any
+questions, change the experimental protocol, or come to any different
+conclusions?)}
+
+\end{document}
