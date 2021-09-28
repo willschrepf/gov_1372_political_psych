@@ -106,14 +106,16 @@ marriage_data_q6 <- marriage_data %>%
     polarized == TRUE ~ "Polarized",
     polarized == FALSE ~ "Not Polarized"
   )) %>%
-  mutate(treatment_partisan = paste(treatment, " group - ", partisan_new))
+  mutate(treatment_partisan = paste(partisan_new, " - ", treatment, "Group"))
 
 
-marriage_data_q6 %>%
+p <- marriage_data_q6 %>%
   ggplot()  +
   geom_bar(mapping = aes(x = polarized_new, y = ..prop.., group = 1), stat = "count") + 
-  facet_wrap(~partisan_new) + 
+  facet_wrap(~treatment_partisan) + 
   labs(title = "Effect of Strong Partisanship on Polarization", x = "Polarization Status", y = "Proportion")
+
+p
 
 ```
 
