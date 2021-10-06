@@ -12,6 +12,10 @@ library(dplyr) # filter(), group_by(), summarize
 library(readr) # read_csv()
 library(ggplot2) # ggplot()
 library(estimatr) # difference_in_means()
+library(ggiraphExtra)
+library(jtools)
+library(ggstance)
+library(huxtable)
 ```
 
 # Social Dominance and Politics
@@ -116,6 +120,27 @@ You'll notice that the variable `white` doesn't exist in our data set. When doin
 We also need to adjust the vote choice variable. Currently, `presvote16` codes vote choice for any party in the 2016 election (Dem, Rep, Green, Libertarian) as well as votes for others. This, too, would become unwieldy in a regression. To simplify, we will turn this into an indicator variable for whether or not the respondent voted for the Republican (Donald J. Trump), called `rep_vote`. To be clear, `rep_vote` should be 1 if the respondent voted for Trump, 0 if they voted for someone else, and NA if they did not vote.
 
 **First, create the `white` variable from the `race` variable, as well as `rep_vote` from `presvote16`. Then, fit the linear model described above. Comment on what you see. Is this in line with what we would expect based on social dominance theory? Interpret your results and comment on what you find, especially as it relates to social dominance theory. Note that you can explore other model specifications in the next question.** 
+
+```{r q6_part1}
+sdo_improved <- sdo %>%
+  mutate(white = ifelse(race == 1, 1, 0)) %>%
+  mutate(rep_vote = case_when(
+    presvote16 == "Trump" ~ 1,
+    presvote16 == "Clinton" ~ 0,
+    presvote16 == "Stein" ~ 0,
+    presvote16 == "Johnson" ~ 0
+  ))
+```
+
+```{r q6_part2}
+model_fit <- lm(rep_vote ~ sdo5 + female + white + educ + age + pid3 + ideo5, data=sdo_improved)
+
+plot_summs(model_fit, scale = TRUE, inner_ci_level = .9) +
+  labs(title = "Multiple Regression Estimates of Republican Voters")
+summ(model_fit, model.info = FALSE, model.fit = FALSE)
+```
+
+
 
 
 ## Question 7
