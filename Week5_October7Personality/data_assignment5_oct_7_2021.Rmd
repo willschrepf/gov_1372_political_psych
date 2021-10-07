@@ -1,0 +1,92 @@
+---
+title: "Personality and Worldview"
+author: "your name here"
+date: "October 7, 2021"
+output: pdf_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(readr) # read_csv
+library(ggplot2) # ggplot
+library(tidyr)
+library(gridExtra) # grid.arrange
+library(psych) #fa.parallel
+```
+
+# Measuring Personality
+
+Carney et al. (2009) use several strategies to assess personality in their investigation of the link between personality and political ideology. This week's assignment will help you understand aspects of these methodologies and associated challenges.
+
+The survey you took included two different short versions of the Big Five Inventory. You will have the chance to compare these two inventories and to get some experience with the Personal Living Space Cue Inventory (PLSCI) ([Gosling et al. 2005](http://gosling.psy.utexas.edu/wp-content/uploads/2014/09/EnvandBehav05GoslingetalPLSCI.pdf)), which was also used in Carney et al. (2009). 
+
+**Data Details:**
+
+* File Name: \texttt{Oct7ClassData.csv}
+
+* Source: These data are from the survey you took in class. You took the BFI-10, a short version of the Big Five Inventory ([Rammstedt and John 2007](https://psycnet.apa.org/record/2007-02371-015)) and the Ten-Item Personality Inventory (TIPI), which is a different instrument designed to quickly meausre the Big Five ([Gosling et al. 2003](http://gosling.psy.utexas.edu/wp-content/uploads/2014/09/JRP-03-tipi.pdf)). You then answered the same questions used by Carney et al. (2009) to assess political attitudes in some of their studies.
+
+Variable Name         | Variable Description
+--------------------- | --------------------------------------
+\texttt{Overall}         | Self-reported overall ideology on a 1-5 scale with 1 being extremely liberal and 5 being extremely conservative
+\texttt{Social}       | Self-reported social ideology on a 1-5 scale with 1 being extremely liberal and 5 being extremely conservative
+\texttt{Economic}    | Self-reported economic ideology on a 1-5 scale with 1 being extremely liberal and 5 being extremely conservative
+\texttt{Random ID}| A randomly generated respondent identifier
+\texttt{BFI\_extraversion}        | The average of the two items on the BFI-10 associated with extraversion
+\texttt{BFI\_agreeableness}    | The average of the two items on the BFI-10 associated with agreeableness
+\texttt{BFI\_conscientiousness}| The average of the two items on the BFI-10 associated with conscientiousness
+\texttt{BFI\_emot\_stability}| The average of the two items on the BFI-10 associated with emotional stability (also known as neuroticism, although low emotional stability is the same as high neuroticism)
+\texttt{BFI\_openness} | The average of the two items on the BFI-10 associated with openness
+\texttt{TIPI\_extraversion}| The average of the two items on the TIPI-10 associated with extraversion
+\texttt{TIPI\_agreeableness}    | The average of the two items on the TIPI-10 associated with agreeableness
+\texttt{TIPI\_conscientiousness}| The average of the two items on the TIPI-10 associated with conscientiousness
+\texttt{TIPI\_emot\_stability}| The average of the two items on the TIPI-10 associated with emotional stability(also known as neuroticism)
+\texttt{TIPI\_openness} | The average of the two items on the TIPI-10 associated with openness
+
+The last 20 variables in the data are the actual items from the BFI-10 and the TIPI. If you want to refresh your memory about the questions and learn which questions were meant to go together, you can find more about the BFI-10 [here](https://www.ocf.berkeley.edu/~johnlab/bfi.htm) (scroll down to the "Is there a shorter version of the BFI available?" question) and the TIPI [here](http://gosling.psy.utexas.edu/scales-weve-developed/ten-item-personality-measure-tipi/ten-item-personality-inventory-tipi/).
+
+Don't forget to load the data.
+
+```{r faces, include=FALSE}
+personality_data <- read_csv('Oct7ClassData.csv')
+```
+
+## Question 1
+Check the Google Drive for your photo assignments and download the assigned photos of living space (you should be assigned to two photos). **Use the worksheet on the Google Drive to do an assessment based on the PLSCI. Based on the PLSCI and your own general impressions, fill out the new class survey with your guess about each person's openness, conscientiousness, and overall political ideology without looking at the actual data. Make sure to write down your responses to the survey since you won't have access to them after you submit. (Page 391 of [Gosling et al. 2002](http://gosling.psy.utexas.edu/wp-content/uploads/2014/09/JPSP02-Roomwithacue.pdf) might help you figure out which items on the inventory will be most helpful here.) Use the random ID to check your guesses. How did you do?** (If you are finding the PLSCI difficult and frustrating, peek ahead to the next few questions.)
+
+
+## Question 2
+Each photo should have at least two people assigned to code it. Confer with each of the people who were also assigned to your photo and see what their ratings were on the PLSCI, as well as their guesses about openness, conscientiousness, and ideology. **What does this tell you about the PLSCI? Read a bit about intercoder (aka inter-rater) reliability and reflect on its importance in research like this.**
+
+
+## Question 3
+**What challenges did you encounter administering the PLSCI? What do you notice that might complicate applying this inventory today?**
+
+
+## Question 4
+**How would you redesign the PLSCI to make it more useful/current?**
+
+
+## Question 5
+Let's see how the class compares to a large dataset of people who have taken one of these personality inventories. [Gosling et al. (2003)](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.113.6704&rep=rep1&type=pdf) report findings from administering the TIPI to about 1800 undergraduates. **Compare the class results to the published norms (you can use either the 15-20 or the 21-30 age range). Make a table or a plot of the class results and then write your thoughts about how these are similar or different to international norms and why that might be the case.**
+
+
+## Question 6
+The BFI-10 and the TIPI are supposed to measure the same five personality traits. To what degree do they seem to be measuring the same constructs in our class sample? **Compare each BFI-10 index to its counterpart TIPI index. You can do this numerically by calculating the correlation coefficient, graphically with a plot, or both. Comment on what you find.**
+
+
+## Question 7: Data Science Question
+We are interested in whether personality is associated with political ideology. Multiple regression is one approach to simultaneously testing associations between several indepdendent variables and a single dependent variable of interest. **Pick one of the personality inventories and use all of the trait indices in a regression model with at least one of the political ideology questions as the dependent variable. Interpret the results. (Note that you can use OLS for this question, even though it might not be the most appropriate model. As a bonus, you can explain why OLS might not be the best model and suggest an alternative. As another bonus, take a look back at all of the regressions you have just run. Why might we be skeptical of any individual p-value associated with one of these regression coefficients?)** Non-data science students should consider tackling part of this question but only using bivariate regression (one political ideology dependnet variable and one personality independent variable.)
+
+
+## Question 8: Data Science Question
+Is the Big Five really best characterized as five factors? If we ask ten questions on a personality inventory, we might think that these questions actually reflect only five underlying (or latent) variables. In fact, this is the supposition of the BFI-10 and the TIPI. Factor analysis is one way to examine data and investigate if the dimension of the data can be reduced from many variables to fewer underlying factors.  **Conduct a factor analysis on either the BFI-10 or the TIPI questions (note, these are the numbered variables, not the named variables) You may want to use the \texttt{fa.parallel} function from the \texttt{psych} package, which you can read more about [here](https://cran.r-project.org/web/packages/psychTools/vignettes/factor.pdf). How many factors does your analysis suggest best explain the class data? Optional bonus: run the code several times. Does your answer change? If so, why?**
+
+
+## Question 9
+If you still have your random ID, take a look at your own BFI-10 and TIPI index scores for each factor. **How do your scores compare to one another across instruments? How do your ratings on each of the Big Five factors compare to your own self image? (Remember that the BFI-10 uses a five point scale while the TIPI uses a seven point scale.)**
+
+
+

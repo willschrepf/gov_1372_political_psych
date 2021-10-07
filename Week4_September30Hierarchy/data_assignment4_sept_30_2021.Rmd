@@ -135,6 +135,8 @@ sdo_improved <- sdo %>%
 ```{r q6_part2}
 model_fit <- lm(rep_vote ~ sdo5 + female + white + educ + age + pid3 + ideo5, data=sdo_improved)
 
+summ(model_fit, model.info = FALSE, model.fit = FALSE)
+
 plot_summs(model_fit, scale = TRUE, inner_ci_level = .9) +
   labs(title = "Multiple Regression Estimates of Republican Voters")
 summ(model_fit, model.info = FALSE, model.fit = FALSE)
