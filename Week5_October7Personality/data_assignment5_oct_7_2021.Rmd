@@ -14,6 +14,14 @@ library(ggplot2) # ggplot
 library(tidyr)
 library(gridExtra) # grid.arrange
 library(psych) #fa.parallel
+library(janitor)
+library(ggiraphExtra)
+library(jtools)
+library(ggstance)
+library(huxtable)
+library(glmnet)
+library(gvlma)
+library(car)
 ```
 
 # Measuring Personality
@@ -50,7 +58,8 @@ The last 20 variables in the data are the actual items from the BFI-10 and the T
 Don't forget to load the data.
 
 ```{r faces, include=FALSE}
-personality_data <- read_csv('Oct7ClassData.csv')
+personality_data <- read_csv('Oct7ClassData.csv') %>%
+  clean_names()
 ```
 
 ## Question 1
@@ -79,6 +88,40 @@ The BFI-10 and the TIPI are supposed to measure the same five personality traits
 
 ## Question 7: Data Science Question
 We are interested in whether personality is associated with political ideology. Multiple regression is one approach to simultaneously testing associations between several indepdendent variables and a single dependent variable of interest. **Pick one of the personality inventories and use all of the trait indices in a regression model with at least one of the political ideology questions as the dependent variable. Interpret the results. (Note that you can use OLS for this question, even though it might not be the most appropriate model. As a bonus, you can explain why OLS might not be the best model and suggest an alternative. As another bonus, take a look back at all of the regressions you have just run. Why might we be skeptical of any individual p-value associated with one of these regression coefficients?)** Non-data science students should consider tackling part of this question but only using bivariate regression (one political ideology dependnet variable and one personality independent variable.)
+
+```{r ds_question}
+personality_data %>%
+  ggplot(aes(x = overall)) +
+  geom_bar() +
+  labs(title = "Distribution of Overall Ideological Scores")
+
+
+overall_model_fit <- lm(overall ~ bfi_extraversion + bfi_agreeableness + bfi_conscientiousness + bfi_emot_stability + bfi_openness, data=personality_data)
+plot_summs(overall_model_fit, scale = TRUE, inner_ci_level = .9) +
+  labs(title = "Multiple Regression for Impact of BFI on\nSelf-Reported Overall Ideology", subtitle = "On a scale of 1-5 from extremely liberal to extremely conservative")
+summ(overall_model_fit)
+
+plot(overall_model_fit) # test assumptions of OLS
+
+gvmodel <- gvlma(overall_model_fit)
+summary(gvmodel) 
+
+vif(overall_model_fit)
+
+social_model_fit <- lm(social ~ bfi_extraversion + bfi_agreeableness + bfi_conscientiousness + bfi_emot_stability + bfi_openness, data=personality_data)
+plot_summs(social_model_fit, scale = TRUE, inner_ci_level = .9) +
+  labs(title = "Multiple Regression for Impact of BFI on\nSelf-Reported Social Ideology", subtitle = "On a scale of 1-5 from extremely liberal to extremely conservative")
+summ(social_model_fit)
+
+economic_model_fit <- lm(economic ~ bfi_extraversion + bfi_agreeableness + bfi_conscientiousness + bfi_emot_stability + bfi_openness, data=personality_data)
+plot_summs(economic_model_fit, scale = TRUE, inner_ci_level = .9) +
+  labs(title = "Multiple Regression for Impact of BFI on\nSelf-Reported Economic Ideology", subtitle = "On a scale of 1-5 from extremely liberal to extremely conservative")
+summ(economic_model_fit)
+
+```
+
+
+
 
 
 ## Question 8: Data Science Question
