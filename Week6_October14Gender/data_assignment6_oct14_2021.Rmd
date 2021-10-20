@@ -48,6 +48,12 @@ Variable Name         | Variable Description
 ```{r biases, include=FALSE, message = FALSE}
 # load the data
 s_data <- read_csv("suffrage_data.csv")
+s_data %>%
+  select(year, polity) %>%
+  group_by(year) %>%
+  mutate(avg = mean(polity)) %>%
+  ggplot(aes(x = year, y = avg)) +
+  geom_line()
 ```
 
 ## Question 1
@@ -89,9 +95,60 @@ To see this, we must plug in values for `female` and `age`. When `female` = 0, t
 
 Interpreting the effect of gender is a bit more complicated, and in this case is nonsensical. To do so, we set `age` = 0 (which doesn't make a ton of sense) to find that the effect of `female` on `education` is .01 when `age` = 0. Always pay attention to whether the coefficients you're focusing on are even substantively meaningful.
 
+```{r}
+model <- lm(init ~ suffrage + polity + polity*suffrage, s_data)
+summary(model)
+```
+
+
 ## Question 7: Data Science Question
 
 When using regression, especially with interactions, sometimes it is useful to visualize the results. **Create two plots of the predicted number of conflicts per year on the y-axis and Polity score on the x-axis (among countries with a Polity score greater than or equal to one only), split by suffrage. That is, one plot should plot the predicted number of conflict per year among suffrage democracies, and the other among non-suffrage democracies. This way you will be able to visualize the interaction between suffrage and Polity score that we saw in the previous question. [This](https://druedin.com/2016/01/16/predicted-probabilities-in-r/) guide may be helpful in doing so - it uses a different type of regression model (binary logit), but the principle of prediction is the same. Make sure to hold the `suffrage` variable at 0 or 1. Comment on what you find.**
+
+```{r}
+# predict function
+model <- lm(init ~ suffrage + polity + polity*suffrage, s_data)
+
+suffrage_0 <- with(s_data, data.frame(polity = 1:10, suffrage = 0))
+
+preds_0 <- predict(model, suffrage_0, type="response", se.fit=TRUE)
+
+predf_0 <- preds_0$fit
+lower_0 <- preds_0$fit - (1.96*preds_0$se.fit) # lower bounds
+upper_0 <- preds_0$fit + (1.96*preds_0$se.fit) # upper bounds
+
+
+
+suffrage_1 <- with(s_data, data.frame(polity = 1:10, suffrage = 1))
+
+preds_1 <- predict(model, suffrage_1, type="response", se.fit=TRUE)
+
+predf_1 <- preds_1$fit
+lower_1 <- preds_1$fit - (1.96*preds_1$se.fit) # lower bounds
+upper_1 <- preds_1$fit + (1.96*preds_1$se.fit) # upper bounds
+
+overall <- data.frame(polity=as.double(names(predf_1)), no_suffrage_pred=predf_0,
+                      lower_ns_pred = lower_0, upper_ns_pred = upper_0, 
+                      suffrage_pred=predf_1, 
+                      lower_s_pred = lower_1, upper_s_pred = upper_1, 
+                      row.names=NULL)
+
+
+overall %>% ggplot(aes(x = polity)) +
+  geom_line(aes(y = no_suffrage_pred, color = "No Suffrage")) +
+  geom_line(aes(y = lower_ns_pred, color = "No Suffrage"), linetype = "dotted") +
+  geom_line(aes(y = upper_ns_pred, color = "No Suffrage"), linetype = "dotted") +
+  geom_line(aes(y = suffrage_pred, color = "Suffrage")) +
+  geom_line(aes(y = lower_s_pred, color = "Suffrage"), linetype = "dotted") +
+  geom_line(aes(y = upper_s_pred, color = "Suffrage"), linetype = "dotted") +
+  labs(x = "Polity", y = "Predicted Conflict", title = "Predicted Conflict for Suffrage and Non-Suffragre Dyads Across Polity Scores", subtitle = "With 95% Confidence Intervals")
+  
+overall
+
+
+
+```
+
 
 ## Question 8
 One of the advantages of the data we have is that we can plot trends over time. **Group countries into those with and without suffrage and plot the average number of disputes initiated by those countries in each year covered by the data. Comment on what you find.**
