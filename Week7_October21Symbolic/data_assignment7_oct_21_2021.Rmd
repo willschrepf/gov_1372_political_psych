@@ -156,9 +156,49 @@ Racial resentment is often considered a symbolic attitude in strength and consis
 ###Part a 
 Run an initial regression examining the relationship between favorability towards the police, party, and treatment. **Run a regression examining party and the onset of the protests' effect on favorability towards the police. Interpret the results**
 
+```{r 8a}
+protest_df <- protest_df %>%
+  mutate(party = as.double(pid7))
+
+protest_df_stand <- protest_df %>%
+  mutate(party.standardised = (party-mean(party, na.rm = TRUE))/sd(party, na.rm = TRUE)) %>%
+  mutate(day_running.standardised = (day_running-mean(day_running))/sd(day_running)) %>%
+  mutate(n_protests.standardised = (n_protests-mean(n_protests))/sd(n_protests)) %>%
+  select(group_favorability_the_police, party.standardised, day_running.standardised, n_protests.standardised)
+
+model <- lm(group_favorability_the_police ~ party + day_running, protest_df)
+model_stand <- lm(group_favorability_the_police ~ party.standardised + day_running.standardised, protest_df_stand)
+```
+
+
 
 ###Part b
 The above functional form probably does not accurately model the relationship of all the relevant covariates in the dataset. What functional form would you recommend using and why? What covariates would you add? Is there need for an interaction term? **Run a regression of your specification and interpret the results. Justify your choices in modeling.**
+
+```{r}
+# exploring what each variable looks like plotted
+ggplot(protest_df, aes(x = party, y = group_favorability_the_police)) +
+  geom_point(alpha = 0.01, position=position_jitter(height=.5, width=.5))
+
+
+ggplot(protest_df, aes(x = day_running, y = group_favorability_the_police)) +
+  geom_point(alpha = 0.01, position=position_jitter(height=1, width=1))
+
+# Honestly not altogether sure how functional form applies here and cannot find any resources as to how to implement in r.
+
+# But I would recommend adding n_protests as a covariate, as that would pose an interesting question of what impacted police favorability the most: the stable attribute of party, time passing from the murder of George Floyd, or the presence of protest. We would want to add an interaction term for any variables that might be different depending on each other. It makes sense to add an interaction between party and days_running, as we might expect the amount of days since George Floyd's murder to impact a strong Republican differently than a Strong Democrat. It also makes sense to add an interaction between party and number of protests in an area, as again, the amount of protests could impact a strong Republican differently than a Strong Democrat. I do not think it's coherent to say, though, that days_running would differently impact people in different n_protests.
+
+# Thus we have our new model:
+
+new_model <- lm(group_favorability_the_police ~ party + day_running + n_protests + party*day_running + party*n_protests, protest_df)
+
+# To more easily compare the terms, let's standardize:
+
+new_model_stand <- lm(group_favorability_the_police ~ party.standardised + day_running.standardised + n_protests.standardised + party.standardised*day_running.standardised + party.standardised*n_protests.standardised, protest_df_stand)
+
+
+```
+
 
 ###Part c
 Linear models are not well suited for bounded ordinal responses. Instead ordinal logit or probit models are frequently employed in order to capture a) that the outcomes are restricted to a scale (in the case of police unfavorability 1-4) and b) that the differences between different rungs on the scale are not necessarily equivalent (going from very unfavorable to somewhat unfavorable is not necessarily the same difference as going from somewhat unfavorable to somewhat favorable). **Using the code below from the MASS package run an ordinal probit model using the same model as part b. How do the coefficients differ from part b?**
@@ -168,7 +208,7 @@ Linear models are not well suited for bounded ordinal responses. Instead ordinal
 library(MASS)
 select <- dplyr::select
 
-polr(data = , formula = , method = "probit")
+polr(data = protest_df_stand, formula = as.factor(group_favorability_the_police) ~ party.standardised + day_running.standardised + n_protests.standardised + party.standardised*day_running.standardised + party.standardised*n_protests.standardised, method = "probit")
 ```
 
 
