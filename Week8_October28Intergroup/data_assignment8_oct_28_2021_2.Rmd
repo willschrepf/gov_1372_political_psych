@@ -1,0 +1,225 @@
+---
+title: 'Data Exploration: Intergroup Contact'
+author: "Your name here"
+date: "October 28, 2021"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(estimatr)
+library(haven)
+library(stargazer)
+library(effsize)
+```
+
+This week, we discussed the importance of intergroup contact in settings like neighborhoods, public transportation, and sports leagues. All of these studies ensured or inferred that intergroup contact actually took place. However, some researchers have studied the possibility that even \textit{imagined} contact with a member of an outgroup can change people's perception of that group. In this Data Exploration assignment we will explore two datasets derived from imagined intergroup contact experiments. In part one, you will look at data from a recent study conducted by Dong Wang, Iain Johnston (a professor in the Harvard Government Department) and Baoyu Wang. Wang et al. (2021) conducted an experiment on a group of Chinese students to determine if imagined social contact could reduce antipathy toward Japanese people. In part two, you will look at the results of our in-class survey, which tested whether imagined social contact with a member of one's less-preferred political party would change attitudes toward members of that party. You can do either part first, but you will probably find the exercise most valuable if you do some of each part.
+
+If you have a question about any part of this assignment, please ask! Note that the actionable part of each question is **bolded**.
+
+# Part One: Chinese Students and Perception of Japanese People
+
+**Data Details:**
+
+* File Name: \texttt{ChinaJapanData.csv}
+
+* Source: These data are from (Wang et al. (2021))[https://drive.google.com/open?id=111pbDphCslbMXbmPBwKNQeQipFAXEgWm&authuser=renos%40g.harvard.edu&usp=drive_fs]. Please take some time to skim this paper in order to get a feel for the population they studied, their key hypotheses, and their experimental procedure. Subjects were asked to imagine a bus ride, either one in which they talked to a Japanese person (treatment) or just enjoyed the scenery (control). They were then asked a series of questions to assess their affective feelings toward Japanese and Chinese people, their perceptions of the characteristics of Japanese and Chinese identity, and demographic, policy, and pschological questions to serve as control variables.
+
+Variable Name         | Variable Description
+--------------------- | --------------------------------------
+\texttt{subject}         | Anonymized identifier for each experimental subject
+\texttt{treated}  | Binary variable equal to \texttt{TRUE} if the subject was told to imagine a bus ride with a Japanese person (the treatment) and \texttt{FALSE} if the subject was told to imagine the scenery on a bus ride (control)
+\texttt{JapanPos}  | Affective feeling about Japanese people ranging from 1 (negative) to 7 (positive)
+\texttt{JapanWarm}  | Affective feeling about Japanese people ranging from 1 (cool) to 7 (warm)
+\texttt{JapanAdmire}  | Affective feeling about Japanese people ranging from 1 (loathing) to 7 (admiration)
+\texttt{JapanRespect}  | Affective feeling about Japanese people ranging from 1 (contempt) to 7 (respect)
+\texttt{ChinaPos}  | Affective feeling about Chinese people ranging from 1 (negative) to 7 (positive) 
+\texttt{ChinaWarm}  | Affective feeling about Chinese people ranging from 1 (cool) to 7 (warm)  
+\texttt{ChinaAdmire}  | Affective feeling about Chinese people ranging from 1 (loathing) to 7 (admiration) 
+\texttt{ChinaRespect}  | Affective feeling about Chinese people ranging from 1 (contempt) to 7 (respect) 
+\texttt{PosDiff}  | Difference between the Chinese and Japanese positivity score
+\texttt{WarmDiff}  | Difference between the Chinese and Japanese warmth score
+\texttt{AdmireDiff}  | Difference between the Chinese and Japanese admiration score
+\texttt{RespectDiff}  | Difference between the Chinese and Japanese respect score 
+\texttt{JapanID\_avg}  | Average of 30 ratings of Japanese people on identity trait pairs, coded from 1 to 7 where higher numbers are less favorable; see p. 12 of Wang et al. (2021) for details
+\texttt{ChinaID\_avg}  | Average of the same 30 identity ratings of Chinese people
+\texttt{ID\_diff\_avg}  | Difference between \texttt{ChinaID\_avg} and \texttt{JapanID\_avg}
+\texttt{age}  | Age in years
+\texttt{gender}  | Gender, coded 1 for male and 0 for female
+\texttt{jpfriend}  | Indicator variable for if subject has a Japanese friend (1) or does not (0)
+\texttt{MediaInd}  | Attitude toward media independence from the government ranging from 1 (strongly oppose) to 5 (strongly support)
+\texttt{freetrade}  | Indicator variable for if subject supports free trade (1) or does not (0)
+\texttt{school\_major}  | Categorical variable denoting major in school; 1 = social sciences, 2 = humanities, 3 = sciences and engineering, 4 = law
+\texttt{PrejControl}  | Motivation to Control Prejudice index; an average of 17 items rated from 1 to 7 in which higher scores denote a greater motivation to control the expression of prejudice
+
+```{r}
+# load the data
+ChinaJapan <- read_csv('ChinaJapanData.csv')
+```
+
+## Question 1
+
+### Part a
+When surveys ask a number of questions to try and measure the same underlying concept, it is common to make a summary index by taking the average of all these items. **Create new variables for the average affective feeling toward Japanese people, the average affective feeling toward Chinese people, and the average difference between the two.** 
+
+
+### Part b
+
+**For at least one of the individual affect items and all three affect averages you created in part a (China, Japan, and the difference between them), report mean values for the treatment and control groups, an estimate of the difference between those groups, and the results of a test for statistical significance. Did imagined social contact change subjects' affect toward Japanese people? Chinese people? What about their affective polarization?**
+
+
+### Part c
+
+Researchers often present the size of an experimental effect in terms of Cohen's D, which calculates the ratio of the treatment effect to the standard deviation. This is a way to understand if a treatment effect is substantively large, in addition to statistically significant. A common "rule of thumb" is that a Cohen's D score of 0.2 is small, 0.5 is medium, and 0.8 is large. Wang et al. (2021) present Cohen's D scores in the tables throughout their article.
+
+Here is a useful interactive visualization of Cohen's D: 
+https://rpsychologist.com/cohend/
+
+**Using the \texttt{cohen.d()} function, for each of the variables you used in Part b above, calculate a Cohen's D and interpret whether it is small, medium, or large.  Do these "rule of thumb" interpretations match your intuitive interpretation? Are any of the differences of means stastically significant, yet substantively small according to the Cohen's D score?** 
+
+
+## Question 2
+
+### Part a
+
+Wang et al. (2021) also investigate whether imagined social contact changes Chinese students' perception of the characteristics associated with Japanese identiy, as well as the difference in perception of the semantic content associated with Chinese and Japanese identity. They use 30 pairs of opposite phrases (like "frank/hypocritical," "civilized/barbaric," and "peace-loving/belligerent") on scales from 1 to 7 to measure these identity traits (higher scores are less favorable). We've provided you with the averages of these thirty items for perception of Chinese and Japanese identites, as well as the average difference between them. **For all three of these indices, report average values for the treatment and control groups, an estimate of the difference between those groups, and the results of a test for statistical significance. How do the experimental effects of imagined contact on identity traits compare to the effects on affect?**
+
+
+### Part b
+
+A useful way to visualize these effects of the experimental treatment is with a treatment effects plot. Below, we provide some sample code for how to make a treatment effects plot based on the t-tests you conducted in part a of this question. **Please work through the code to make sure you understand it and interpret the findings depicted in the resulting plot.** See p. 2 of Mousa (2020) from this week's readings for a good example of plots like this.
+
+```{r}
+# First, store the t-tests as new objects in R
+JapanIDdiff <- difference_in_means(JapanID_avg ~ treated, data = ChinaJapan)
+ChinaIDdiff <- difference_in_means(ChinaID_avg ~ treated, data = ChinaJapan)
+Diff_in_ID_diff <- difference_in_means(ID_diff_avg ~ treated, data = ChinaJapan)
+
+# These objects are called lists; they store values like point estimates and confidence intervals of statistical tests
+
+# Next, we extract information from these lists and save them as vectors that you will use to make the data for the plot
+outcomes <- c('Japanese Identity Rating', 'Chinese Identity Rating', 'Identity Difference') # for this vector we have to make it ourselves based on what we want the plot's labels to be
+pointests <- c(JapanIDdiff$coefficients, ChinaIDdiff$coefficients, Diff_in_ID_diff$coefficients)
+lowbounds <- c(JapanIDdiff$conf.low, ChinaIDdiff$conf.low, Diff_in_ID_diff$conf.low)
+upbounds <- c(JapanIDdiff$conf.high, ChinaIDdiff$conf.high, Diff_in_ID_diff$conf.high)
+
+# Combine the vectors into a data frame
+treatment_effect_plot_data <- tibble(outcomes,pointests,lowbounds,upbounds)
+
+# Make the plot
+ggplot(treatment_effect_plot_data, mapping=aes(x=factor(outcomes, levels = outcomes), y=pointests, ymin=lowbounds, ymax=upbounds)) + geom_pointrange() + geom_hline(yintercept = 0, linetype = 'dashed') + coord_flip() + xlab('Experimental Outcomes') + ylab('Treatment Effect (with 95% CI)')
+
+# Why did we use the factor() function for defining the x-axis? If you take the factor() function with the `levels =' argument out of the code, the x-axis will default to being in alphabetical order.
+```
+
+
+### Part c
+
+**Make your own treatment effects plot to visualize the effect of treatment on all four items associated with affect toward Japanese people and the index averaging those items. Interpret your results.**
+
+
+## Question 3: Data Science Question
+
+### Part a
+
+Pick one of the two average difference variables (\texttt{AffectDiff\_avg} or \texttt{ID\_diff\_avg}) to use as a dependent variable for this question. Then **pick at least two of the control variables and write hypotheses about how they would affect your chosen dependent variable.** Do this before you do part b of this question.
+
+
+### Part b
+
+**Use multiple regression to test your hypotheses. Be sure to include your selected control variables and the treatment variable at a minimum, bu the exact form of the model is up to you. Report and interpret the regression coefficients in the context of your hypotheses.**
+
+
+
+### Part c
+Coefficient plots can be a good way to display main results from a regression in a way that is visually easier to interpret than a table. They are very similar to the treatment effect plots we made in the previous question. **Make a coefficient plot with the point estimates and 95\% confidence intervals for all of your regression coefficients other than the intercept. Be sure to include some kind of line at zero to aid interpretation of statistical significance.** Take a look at p. 5 of Brown et al. (2021) from this week's reading for an example of a coefficient plot (although note that that is plotting one regression coefficient across multiple regression specifications; we're asking you to plot multiple regression coefficients from one regression model).
+
+
+# Part Two: Harvard Students and Perception of Members of the Other Party
+
+**Data Details:**
+
+* File Name: \texttt{Oct28ClassData.csv}
+
+* Source: These data are from the Qualtrics survey you all took last week. About half of you were in the control condition and were simply asked to imagine a bus ride with beautiful scenery; the other half were in the treatment condition and were asked to imagine a bus ride next to a member of your non-preferred US political party. All students were then asked a series of questions to assess their affective feelings toward Democrats and Republicans and their perceptions of the characteristics of Democratic and Republican identity. Additional control variables were merged from the class background survey.
+
+Variable Name         | Variable Description
+--------------------- | --------------------------------------
+\texttt{Treated}  | Binary variable equal to \texttt{TRUE} if the subject was told to imagine a bus ride with a member of the opposing political party (the treatment) and \texttt{FALSE} if the subject was told to imagine the scenery on a bus ride (control)
+\texttt{ClosestParty}  | Which of the two major US political parties the subject feels closes to
+\texttt{strongPARTISAN}  | Binary variable coded as \texttt{TRUE} if subject self-identifies as a strong partisan and \texttt{FALSE} otherwise
+\texttt{ControlScenario\_1}  | First text-based reflection of the imagined bus ride for those in the control condition
+\texttt{ControlScenario\_2}  | Second text-based reflection of the imagined bus ride for those in the control condition
+\texttt{ControlScenario\_3}  | Third text-based reflection of the imagined bus ride for those in the control condition 
+\texttt{TreatmentScenario\_1}  | First text-based reflection of the imagined bus ride for those in the treatment condition  
+\texttt{TreatmentScenario\_2}  | Second text-based reflection of the imagined bus ride for those in the treatment condition 
+\texttt{TreatmentScenario\_3}  | Third text-based reflection of the imagined bus ride for those in the treatment condition 
+\texttt{RepublicanAffect\_1}  | Affective feeling about Republicans ranging from 1 (negative) to 7 (positive)
+\texttt{RepublicanAffect\_2}  | Affective feeling about Republicans ranging from 1 (cool) to 7 (warm)
+\texttt{RepublicanAffect\_3}  | Affective feeling about Republicans ranging from 1 (loathing) to 7 (admiration)
+\texttt{RepublicanAffect\_4}  | Affective feeling about Republicans ranging from 1 (contempt) to 7 (respect) 
+\texttt{DemocraticAffect\_1}  | Affective feeling about Democrats ranging from 1 (negative) to 7 (positive)
+\texttt{DemocraticAffect\_2}  | Affective feeling about Democrats ranging from 1 (cool) to 7 (warm)
+\texttt{DemocraticAffect\_3}  | Affective feeling about Democrats ranging from 1 (loathing) to 7 (admiration)
+\texttt{DemocraticAffect\_4}  | Affective feeling about Democrats ranging from 1 (contempt) to 7 (respect)
+\texttt{RepublicanIdentity\_1}  | Rating of Republican identity trait from 1 (obstinate) to 7 (open-minded) (note that identity favorability is associated with the higher number, unlike in the data from Part One)
+\texttt{RepublicanIdentity\_2}  | Rating of Republican identity trait from 1 (evil) to 7 (moral) 
+\texttt{RepublicanIdentity\_3}  | Rating of Republican identity trait from 1 (arrogant) to 7 (humble)
+\texttt{RepublicanIdentity\_4}  | Rating of Republican identity trait from 1 (cruel) to 7 (kind)
+\texttt{DemocraticIdentity\_1}  | Rating of Democratic identity trait from 1 (obstinate) to 7 (open-minded)
+\texttt{DemocraticIdentity\_2}  | Rating of Democratic identity trait from 1 (evil) to 7 (moral) 
+\texttt{DemocraticIdentity\_3}  | Rating of Democratic identity trait from 1 (arrogant) to 7 (humble)
+\texttt{DemocraticIdentity\_4}  | Rating of Democratic identity trait from 1 (cruel) to 7 (kind)
+\texttt{gender}  | Character variable reflecting self-identified gender
+\texttt{college\_stats}  | Binary variable coded as \texttt{TRUE} if subject self-identifies as having taken college-level statistics and \texttt{FALSE} otherwise
+\texttt{year}  | Year in college from 1 to 4
+\texttt{US}  | Binary variable coded as \texttt{TRUE} if subject self-identifies as having been born in the United States and \texttt{FALSE} otherwise
+\texttt{InPartyAffect\_(1-4)}  | Affective feelings about the in-party using the same numbering scheme as above
+\texttt{InPartyAffect\_avg}  | Average affective feelings about the in-party
+\texttt{OutPartyAffect\_(1-4)}  | Affective feelings about the out-party using the same numbering scheme as above
+\texttt{OutPartyAffect\_avg}  | Average affective feelings about the out-party
+\texttt{InPartyIdentity\_(1-4)}  | Identity ratings about the in-party using the same numbering scheme as above
+\texttt{InPartyIdentity\_avg}  | Average identity ratings about the in-party
+\texttt{OutPartyIdentity\_(1-4)}  | Identity ratings about the out-party using the same numbering scheme as above
+\texttt{OutPartyAffect\_avg}  | Average identity ratings about the out-party
+\texttt{AffectDiff\_(1-4)}  | Difference in affective feelings between in-party and out-party using the same numbering scheme as above
+\texttt{AffectDiff\_avg}  | Average difference in affective feelings between in-party and out-party
+\texttt{IdentityDiff\_(1-4)}  | Difference in identity ratings between in-party and out-party using the same numbering scheme as above
+\texttt{IdentityDiff\_avg}  | Average difference in identity ratings between in-party and out-party
+
+
+```{r}
+# load the data
+ClassExperiment <- read_csv('Oct28ClassData.csv')
+```
+
+
+## Question 4 
+### Part a 
+**For at least one of the individual affect items, the in-party and out-party affect averages, and the average affect difference, report average values for the treatment and control groups, an estimate of the difference between those groups, and the results of a test for statistical significance. Did imagined social contact change your classmates' affect toward members of the opposing party? Their own party? What about their affective polarization?**
+
+
+### Part b
+**For at least one individual identity trait, the in-party and out-party identity averages, and the average identity difference, report mean values for the treatment and control groups, an estimate of the difference between those groups, and the results of a test for statistical significance. How do the experimental effects of imagined contact on identity traits compare to the effects on affect in the class sample?**
+
+
+## Question 5 
+
+**Compare the results from the class experiment to the results from Wang et al. (2021). What do you hypothesize accounts for similarities or differences in the results?**
+
+
+## Question 6: Data Science Question
+
+We have not yet asked you to use the free response data, which takes the form of unstructured text. With this question, we challenge you to find a creative way to use this data. **To structure your work, first suggest a hypothesis that could be investigated using the text data and the other data from the experiment. Second, implement a method to use the text data to test this hypothesis. Your method can involve automated or manual processing of the text.** You might consider using a function like \texttt{nchar} to characterize the length of response or a package like (\texttt{stm})[https://cran.r-project.org/web/packages/stm/index.html] to do more sophisticated content analysis.
+
+
+## Question 7
+
+**Can you glean any additional insights by using the control variables included with the class experiment data? For example, are the results different if you subset to strong partisans or people born in the United States? Be creative.**
+
