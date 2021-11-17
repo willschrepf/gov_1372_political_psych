@@ -20,6 +20,7 @@ library(readxl) # you might need to install the readxl package before loading it
 library(plot.matrix) # you might need to install the plot.matrix package before loading it
 library(sjlabelled) # you might need to install the sjlabelled package before loading it
 library(effsize)
+library(psych)
 select <- dplyr::select
 ```
 
@@ -67,62 +68,51 @@ NationscapeVars <- full_join(NationscapeVars_1,NationscapeVars_2) %>% # the full
 
 Contextual influences are all about the fleeting events that shift our attitudes and behavior. These can be something we personally experience, like encountering people on the street (Sands 2017) or voting at a school (Berger et al. 2008). But they can also be events we are exposed to by press coverage like Supreme Court decision (Tankard and Paluck 2017) or even emotions evoked by press coverage (as was experimentally modeled by Zeitzoff 2014). For this exercise we will think about events that people in a given state or across the country would plausibly have been exposed to via news coverage. **Think about events that happened between July 2019 and July 2020. Maybe this is something that made national news or maybe it was something that received a lot of coverage in your home state or region. Write down an example or two that you might be interested in considering. Use [Google Trends](https://trends.google.com/trends/?geo=US) to confirm that there was a spike in interest, as demonstrated by an increase in Google searches, in your event and include a screenshot or a hyperlink to your results.** Try entering a relevant search term and then using a "Custom time range" (one of the drop down options instead of the default ""Past 12 months") to make your visualization.
 
-### Example 
+## My Question
 
-The teaching staff were interested in thinking about the effects of the back-to-back mass shootings that took place on August 3 and 4, 2019 in El Paso, Texas and Dayton, Ohio, respectively. A Google Trends [visualization](https://trends.google.com/trends/explore?date=2019-07-01%202019-09-01&geo=US&q=shooting) confirms a dramatic spike in search interest for "shooting" in early August 2019.
+I'm going to look at the first impeachment of Pres. Donald Trump; [Google Trends](https://trends.google.com/trends/explore?date=2019-07-01%202020-07-31&geo=US&q=impeachment) confirms a big spike around December 18, when the House voted to impeach on two articles.
 
 
 ## Question 2
 
 Think about some outcomes of interest to you that might have been affected by the contextual influence of the event that you chose. Look in the Nationscape data for variables that fit your outcomes or are reasonable proxies for those outcomes. The variable names in the data you have loaded are pretty informative, but use the full data folder you downloaded earlier to look in the codebooks for more complete descriptions of the variables and how they are measured. There is a codebook in each week's folder; you can look at any week's codebook to get a sense of the variables that are common across the survey waves. **Make sure that your variables are present in the data for the time period in which you want to look for contextual effects. Present these results in a plot.**
 
-### Example
+```{r q2}
+NationscapeVars %>%
+  select(Date, pres_approval, consider_trump, pid7_legacy, ideo5, muslimban, age) %>%
+  mutate(date = as.character(Date)) %>%
+  filter(date == "2019-12-05" | date == "2019-12-12" | date == "2019-12-19" | date == "2019-12-26" | date == "2020-01-02")
 
-We might think that news coverage of mass shootings would induce anxiety. Given some of readings last week, we wondered if respondents would become more interested in the news due to anxiety. There aren't any obvious proxies for anxiety, but there are several good variables to gauge political interest (the \texttt{interest} variable) and information seeking (the variables of the form \texttt{news\_sources\_xxxx}). Increases in these variables would be consistent with a noted effect of anxiety on the search for inforamtion.  It also seems plausible that the shootings might elevate the priority people place on crime as an issue worthy of national attention. \texttt{extra\_priorities\_crime} seems appropriate here.
+heat_data <- NationscapeVars %>% mutate(across(.cols = everything(), as.logical)) %>% select(c(pres_approval, consider_trump, pid7_legacy, ideo5, muslimban, age))
 
-We can check the availability of these data using a heatmap.
+plot(t(as.matrix(heat_data)), col = c('red','green'), las = 2)
 
-```{r}
-heat_data <- NationscapeVars %>% mutate(across(.cols = everything(), as.logical)) %>% select(c(extra_priorities_crime,interest,news_sources_facebook,news_sources_cnn))
-
-plot(t(as.matrix(heat_data)), col = c('red','green'), las = 2) # we're using the plot() function from base R here; it only works this way because we have installed and loaded the plot.matrix package
 ```
 
-This isn't the prettiest plot. But it quickly shows us that the political interest and news consumption variables have coverage throughout the data, whereas the crime question was only asked in one week.
 
+All data are present!
 
 ## Question 3
 
 **Based on what you have thought about and the data you have found, clearly state a specific research question and a hypothesis. Which channel (or channels) through which situational factors can affect political behavior does your hypothesis implicate? (In class, we talked about rational choice, priming, and emotional channels.)** The research question should not be obvious ahead of time (although you should have a theoretical expectation or competing hypotheses); it should be be descriptive, correlational, or causal in nature; and it should be answerable with the data you have available. Make sure your research question is specific; don't confuse the research question with a broader, motivating question that might be used to get people interested in your topic.
 
-### Example
-
-Since we don't have enough data to consider crime as a national policy priority, we will focus on information search. Our research question is "Were the early August 2019 mass shootings associated with increased interest in and consumption of political news?" This might fit under a broader motivational question of "Does news coverage of violent events lead to information seeking by causing anxiety?" but we don't have the ability to answer such a broad, causal question using only the Nationscape data.
-
-Our hypothesis is that the August 2019 mass shootings were associated with increased political interest and news consumption, especially in the states where those shootings took place. This is an example of how situational context could influence political behavior through the emotional channel, although we cannot directly test the role of anxiety.
+My research question is "Did the first impeachment of Donald Trump cause changes in people's political attitudes, policy positions, electoral intentions, or ideology? And were these effects different for those who were old enough to witness Bill Clinton's impeachment? This is an example of how situational context could influence political behavior through priming.
 
 
 ## Question 4
 
 In academic and professional settings, peer feedback, especially early in a project, can force you to clarify your thinking and be an important source of ideas. It's also important to be able to give a quick 'elevator pitch' for your project (so named because it can be delivered in no more time than an elevator ride). We've randomly assigned you into groups to share your ideas so far and get your peers' input about sources you should read, different ways to approach your analysis, or questions about your hypotheses. **Get together in your groups, have everyone give their project's 'elevator pitch,' and gather feedback from your peers. Write at least one thing you took away from this session.** The next couple of questions will ask you to try to use the data to answer your research question and test your hypotheses, so be sure to brainstorm good ways to approach those tasks.
 
+Someone had the idea to include "policy positions" as well, so I added that to my research question.
+
 
 ## Question 5
 
 No research project exists in a vacuum. As you get ready for your final projects, we want you to practice finding, summarizing, and citing related literature. **Identify at least two academic articles that might provide some background for your research question. List the complete source citations and include links to the articles you found.** Google Scholar (https://scholar.google.com/) or Hollis (https://hollis.harvard.edu/) are good places to look for these.
 
-### Example
+Jacobson, Gary C. "Donald Trump and the parties: Impeachment, pandemic, protest, and electoral politics in 2020." Presidential Studies Quarterly 50.4 (2020): 762-795. [Link](https://onlinelibrary.wiley.com/doi/epdf/10.1111/psq.12682)
 
-O'Brien and Taku (2022) find in an experiment on US undergraduates that reading news coverage about mass shootings increases anxiety. Joslyn and Haider-Markel (2018) show using survey evidence that people who experienced higher anxiety in the wake of the 2016 Orlando shooting changed their policy beliefs and perceptions of institutions. Our research examines the middle step in this causal chain: information search. Were the August 2019 mass shootings associated with increased interest in and consumption of political news? 
-
-(Your response can just be a list of articles, but feel free to expand on it as we did above if you so choose.)
-
-References:
-
-Joslyn, Mark R., and Donald P. Haider-Markel. “The Direct and Moderating Effects of Mass Shooting Anxiety on Political and Policy Attitudes.” Research & Politics, (July 2018). https://doi.org/10.1177/2053168018794060.
-
-O'Brien, Colin, and Taku, Kanako. "Alpha and beta changes in anxiety in response to mass shooting related information."
-Personality and Individual Differences, Volume 186, Part A, (2022). https://doi.org/10.1016/j.paid.2021.111326.
+Lee, Changjun, Jieun Shin, and Ahreum Hong. "Does social media use really make people politically polarized? Direct and indirect effects of social media use on political polarization in South Korea." Telematics and Informatics 35.1 (2018): 245-254. [Link](https://www.sciencedirect.com/science/article/abs/pii/S0736585317305208)
 
 
 ## Question 6
@@ -135,49 +125,138 @@ First we will need to load and compile the data for the several weeks surroundin
 ```{r}
 # load the weekly survey files
 
-Jul18 <- read_dta('ns20190718.dta') %>%
-  remove_all_labels() # we need to remove the labels in order for these files to be joined together
-Jul25 <- read_dta('ns20190725.dta')%>%
+Jul18 <- read_dta('Nationscape-DataRelease_WeeklyMaterials_DTA/phase_1_v20200814/ns20191205/ns20191205.dta') %>%
   remove_all_labels()
-Aug01 <- read_dta('ns20190801.dta') %>%
+Jul25 <- read_dta('Nationscape-dataRelease_WeeklyMaterials_DTA/phase_1_v20200814/ns20191212/ns20191212.dta')%>%
   remove_all_labels()
-Aug08 <- read_dta('ns20190808.dta')%>%
+Aug01 <- read_dta('Nationscape-dataRelease_WeeklyMaterials_DTA/phase_1_v20200814/ns20191219/ns20191219.dta') %>%
   remove_all_labels()
-Aug15 <- read_dta('ns20190815.dta')%>%
+Aug08 <- read_dta('Nationscape-dataRelease_WeeklyMaterials_DTA/phase_1_v20200814/ns20191226/ns20191226.dta')%>%
+  remove_all_labels()
+Aug15 <- read_dta('Nationscape-DataRelease_WeeklyMaterials_DTA/phase_2_v20200814/ns20200102/ns20200102.dta')%>%
   remove_all_labels()
 
 
 # join them all together
-Summer2019 <- full_join(Jul18,Jul25) %>% 
+full_data <- full_join(Jul18,Jul25) %>% 
   full_join(., Aug01) %>%
   full_join(., Aug08) %>%
   full_join(., Aug15)
 
 # recode NAs
-Summer2019 <- Summer2019 %>%
+full_data <- full_data %>%
   mutate(across(.cols = everything(), ~na_if(., 999))) %>%
   mutate(across(.cols = everything(), ~na_if(., 888)))
 ```
 
-It might be helpful to create a variable indicating whether observations took place after your event of interest. We do this using the below code.
 ```{r}
-# create an indicator variable for surveys administered after the mass shootings
-Summer2019 <- Summer2019 %>%
-  mutate(treated = if_else(start_date > as.Date('2019-08-04'), TRUE, FALSE))
+# create an indicator variable for surveys administered after impeachment
+full_data <- full_data %>%
+  mutate(treated = if_else(start_date > as.Date('2019-12-18'), TRUE, FALSE)) %>% 
+  mutate(witnessed_bc_imp = if_else(age > 39, TRUE, FALSE)) %>%
+  select(start_date, pres_approval, consider_trump, pid7_legacy, ideo5, muslimban, age, treated, witnessed_bc_imp)
 ```
 
 As a first cut, we can try a difference in means. Don't forget to check the effect size.
 ```{r}
-difference_in_means(interest ~ treated, data = Summer2019 %>% filter(as.Date('2019-07-31') < start_date) %>% filter(start_date < as.Date('2019-08-09')))
+difference_in_means(pres_approval ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))
+difference_in_means(consider_trump ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))
+difference_in_means(pid7_legacy ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))
+difference_in_means(ideo5 ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))
+difference_in_means(muslimban ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))
+difference_in_means(witnessed_bc_imp ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))
 
-cohen.d(interest ~ treated, data = Summer2019 %>% filter(as.Date('2019-07-31') < start_date) %>% filter(start_date < as.Date('2019-08-09')))
 ```
 
-Even though there is a statistically significant difference in means, the effect size is negligible. And becuase the Nationscape survey asks different groups of people the same questions every week, some of the change in measured opinion is probably just due to sampling error instead of significant shifts in the population. At least based on this test, there doesn't seem to be evidence supporting our hypothesis. That's ok! It could be because this is a pretty crude test of our theory, or we might just have been wrong. It certainly warrants more investigation, but disconfirming hypotheses is an important part of how science moves forward.
+In order of greatest to least effect on the treatment: party preference, ideology, presidential approval, view on the muslim ban, witnessed Bill Clinton's impeachment, and consideration of Trump for 2020.
+
+```{r graphing}
+pres_approval_graph <- full_data %>%
+  mutate(date = as.Date(start_date)) %>%
+  group_by(date) %>%
+  summarize(pres_approval = mean(pres_approval, na.rm = TRUE)) %>%
+  ggplot(aes(x = date, y = pres_approval)) +
+  geom_line() +
+  geom_vline(xintercept = as.Date("2019-12-18"), color = "red") +
+  labs(title = "Presidential Dispproval Before and After 12-18 Impeachment Vote", subtitle = "Higher Scores Mean Less Approval") +
+  annotate("text", x  = as.Date("2019-12-30"), y=2.55, label = paste("diff. in means before/after: ", (difference_in_means(pres_approval ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))$coefficient[[1]])))
+
+consider_trump_graph <- full_data %>%
+  mutate(date = as.Date(start_date)) %>%
+  group_by(date) %>%
+  summarize(consider_trump = mean(consider_trump, na.rm = TRUE)) %>%
+  ggplot(aes(x = date, y = consider_trump)) +
+  geom_line() +
+  geom_vline(xintercept = as.Date("2019-12-18"), color = "red") +
+  labs(title = "Consideration of Trump for 2020 Election Before and After 12-18 Impeachment Vote", subtitle = "Higher Scores Mean Less Consideration") +
+  annotate("text", x  = as.Date("2019-12-30"), y=1.53, label = paste("diff. in means before/after: ", (difference_in_means(consider_trump ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))$coefficient[[1]])))
+
+pid7_legacy_graph <- full_data %>%
+  mutate(date = as.Date(start_date)) %>%
+  group_by(date) %>%
+  summarize(pid7_legacy = mean(pid7_legacy, na.rm = TRUE)) %>%
+  ggplot(aes(x = date, y = pid7_legacy)) +
+  geom_line() +
+  geom_vline(xintercept = as.Date("2019-12-18"), color = "red") +
+  labs(title = "Party Identification Before and After 12-18 Impeachment Vote", subtitle = "1 = Strong D, 7 = Strong R")  +
+  annotate("text", x  = as.Date("2019-12-30"), y=4.2, label = paste("diff. in means before/after: ", (difference_in_means(pid7_legacy ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))$coefficient[[1]])))
+
+ideo5_graph <- full_data %>%
+  mutate(date = as.Date(start_date)) %>%
+  group_by(date) %>%
+  summarize(ideo5 = mean(ideo5, na.rm = TRUE)) %>%
+  ggplot(aes(x = date, y = ideo5)) +
+  geom_line() +
+  geom_vline(xintercept = as.Date("2019-12-18"), color = "red") +
+  labs(title = "Political Ideology Before and After 12-18 Impeachment Vote", subtitle = "Higher Score Equals More Conservative")  +
+  annotate("text", x  = as.Date("2019-12-30"), y=3.15, label = paste("diff. in means before/after: ", (difference_in_means(ideo5 ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))$coefficient[[1]])))
+
+muslimban_graph <- full_data %>%
+  mutate(date = as.Date(start_date)) %>%
+  group_by(date) %>%
+  summarize(muslimban = mean(muslimban, na.rm = TRUE)) %>%
+  ggplot(aes(x = date, y = muslimban)) +
+  geom_line() +
+  geom_vline(xintercept = as.Date("2019-12-18"), color = "red") +
+  labs(title = "View on Muslim Ban Before and After 12-18 Impeachment Vote", subtitle = "Higher Score Equals Less Support for Muslim ban")  +
+  annotate("text", x  = as.Date("2019-12-30"), y=1.63, label = paste("diff. in means before/after: ", (difference_in_means(muslimban ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))$coefficient[[1]])))
+
+
+
+pres_approval_graph
+consider_trump_graph
+pid7_legacy_graph
+ideo5_graph
+muslimban_graph
+
+```
 
 
 ## Question 7: DATA SCIENCE QUESTION
 
 **Extend your work from the previous question to consider other factors, like the possibility of heterogenous treatment effects, confounding variables, or use a more sophisticated approach to statistical inference, like regression discontinuity in time.**
+
+```{r multiple_regression}
+#running a standardized multiple regression
+
+std_data <- full_data %>%
+  mutate(standardized_pres_approval = scale(pres_approval)) %>%
+  mutate(standardized_consider_trump = scale(consider_trump)) %>%
+  mutate(standardized_pid7_legacy = scale(pid7_legacy)) %>%
+  mutate(standardized_ideo5 = scale(ideo5)) %>%
+  mutate(standardized_muslimban = scale(muslimban)) %>%
+  mutate(standardized_age = scale(age)) %>%
+  mutate(standardized_witnessed_bc_imp = scale(witnessed_bc_imp)) %>%
+  mutate(standardized_treated = scale(treated)) %>%
+  select(standardized_pres_approval, standardized_consider_trump, standardized_pid7_legacy, standardized_ideo5, standardized_muslimban, standardized_age, standardized_witnessed_bc_imp, standardized_treated)
+
+
+mr_model <- lm(standardized_pid7_legacy ~ standardized_treated + standardized_pres_approval + standardized_consider_trump + standardized_ideo5 + standardized_muslimban + standardized_age + standardized_witnessed_bc_imp, data = std_data)
+
+plot_summs(mr_model, scale = TRUE, inner_ci_level = .9) +
+  labs(title = "Multiple Regression Estimates of Effect on PID7")
+
+```
+
 
 
