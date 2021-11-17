@@ -84,7 +84,7 @@ The data is not currently in the most usable condition. As currently read in, ma
 ```{r, error=TRUE}
 #Method 1: Renaming by name
 Study1_processing1 <- Study1_preprocess %>% 
-  rename_with(.cols = c(Q13, Q14, Q15), ~c("PUT COMMA SEPARATED LIST OF VARIABLE NAMES AS STRINGS HERE FOR THESE THREE VARIABLES IN ORDER"))
+  rename_with(.cols = c(Q13, Q14, Q15), ~c("Q13", "Q14", "Q15"))
 ```
 
 ###Part b
