@@ -21,6 +21,16 @@ library(plot.matrix) # you might need to install the plot.matrix package before 
 library(sjlabelled) # you might need to install the sjlabelled package before loading it
 library(effsize)
 library(psych)
+library(gridExtra)
+library(estimatr)
+library(haven)
+library(stargazer)
+library(MASS)
+library(ggiraphExtra)
+library(jtools)
+library(ggstance)
+library(huxtable)
+
 select <- dplyr::select
 ```
 
@@ -165,6 +175,7 @@ difference_in_means(pid7_legacy ~ treated, data = full_data %>% filter(as.Date('
 difference_in_means(ideo5 ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))
 difference_in_means(muslimban ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))
 difference_in_means(witnessed_bc_imp ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))
+difference_in_means(age ~ treated, data = full_data %>% filter(as.Date('2019-12-05') < start_date) %>% filter(start_date < as.Date('2020-01-02')))
 
 ```
 
@@ -228,6 +239,8 @@ consider_trump_graph
 pid7_legacy_graph
 ideo5_graph
 muslimban_graph
+
+grid.arrange(pres_approval_graph, consider_trump_graph, pid7_legacy_graph, ideo5_graph, muslimban_graph)
 
 ```
 
