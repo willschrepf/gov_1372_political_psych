@@ -121,6 +121,50 @@ There are seven different outcome variables associated with respondents' activit
 ## Question 5: DATA SCIENCE QUESTION
 **Pick one of the outcomes associated with the BLM protests. Define a new binary variable that takes 1 if the respondent actually engaged in the behavior and 0 if they didn't engage in it or merely hypothetically would engage in it. Fit a regression model of your choosing with your new variable as the outcome, COVID burden as the independent variable, and control variables of your choosing. Plot the predicted probability of engaging in your chosen behavior as a function of COVID burden, holding other variables at their mean (or, for gender, making separate plots for each gender). Make sure to also plot 95\% confidence intervals.** Hint: look back at the solutions to Data Exercise 6 for ideas about how to code this.
 
+```{r}
+q5_data <- covid_data %>%
+  filter(country == "United States") %>%
+  select(age, gender, US_ideo, covid_burden, confront_BLM) %>%
+  mutate(confronted_BLM = if_else((confront_BLM == 0 | confront_BLM == 1), 0, 1))
+
+
+model <- lm(confront_BLM ~ covid_burden + age + US_ideo + gender, q5_data)
+
+gender_0 <- with(q5_data, data.frame(covid_burden = 1:7, age=mean(age), US_ideo = mean(US_ideo, na.rm = TRUE), gender = 0))
+
+preds_0 <- predict(model, gender_0, type="response", se.fit=TRUE)
+predf_0 <- preds_0$fit
+lower_0 <- preds_0$fit - (1.96*preds_0$se.fit) # lower bounds
+upper_0 <- preds_0$fit + (1.96*preds_0$se.fit) # upper bounds
+
+
+gender_1 <- with(q5_data, data.frame(covid_burden = 1:7, age=mean(age), US_ideo = mean(US_ideo, na.rm = TRUE), gender = 1))
+
+preds_1 <- predict(model, gender_1, type="response", se.fit=TRUE)
+predf_1 <- preds_1$fit
+lower_1 <- preds_1$fit - (1.96*preds_0$se.fit) # lower bounds
+upper_1 <- preds_1$fit + (1.96*preds_0$se.fit) # upper bounds
+
+overall <- data.frame(covid_burden=as.double(names(predf_1)), female=predf_0,
+                      female_lower = lower_0, female_upper = upper_0, 
+                      male=predf_1, 
+                      male_lower = lower_1, male_upper = upper_1, 
+                      row.names=NULL)
+
+
+overall %>% ggplot(aes(x = covid_burden)) +
+  geom_line(aes(y = female, color = "Female")) +
+  geom_line(aes(y = female_lower, color = "Female"), linetype = "dotted") +
+  geom_line(aes(y = female_upper, color = "Female"), linetype = "dotted") +
+  geom_line(aes(y = male, color = "Male")) +
+  geom_line(aes(y = male_lower, color = "Male"), linetype = "dotted") +
+  geom_line(aes(y = male_upper, color = "Male"), linetype = "dotted") +
+  labs(x = "Covid Burden", y = "Predicted Confrontation of BLM", title = "Predicted Confrontation of BLM for Survey Respondents\nAcross Covid Burden Scores", subtitle = "With 95% Confidence Intervals")
+
+  
+```
+
+
 
 ## Question 6
 
